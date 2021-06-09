@@ -11,14 +11,14 @@ function book(title, quantity, value) {
 
 let mybook = new book("Harry Potter", 5, 500);
 
-store.prototype.addBook = function(title, quantity, value){
-  let newBook= new book(title, quantity, value)
+store.prototype.addBook = function (title, quantity, value) {
+  let newBook = new book(title, quantity, value);
   this.list.push(newBook);
-}
+};
 
 sampleStore.addBook("Cinder", 10, 300);
 sampleStore.addBook("The Little Prince", 10, 300);
-sampleStore.addBook("Lord of the RIngs", 2, 500);
+sampleStore.addBook("Lord of the Rings", 2, 500);
 
 store.prototype.restockBook = function (title, quantity) {
   this.list.some((book) => {
@@ -34,7 +34,7 @@ sampleStore.restockBook("Harry Potter", 4);
 
 // TODO
 //sell book
-store.prototype.sellBook = function (title, quantity) {
+/* store.prototype.sellBook = function (title, quantity) {
   const bookIndex = this.list.findIndex((book) => book.title === title);
 
   if (bookIndex !== -1) {
@@ -53,6 +53,24 @@ store.prototype.sellBook = function (title, quantity) {
   } else {
     console.log(`We don't sell that book here`);
   }
+}; */
+//Refactor
+store.prototype.sellBook = function (title, quantity) {
+  this.list.some((book) => {
+    if (book.title === title) {
+      if (book.quantity < quantity) {
+        console.log(`STOCKS LEFT: ${book.quantity} for ${book.title}`);
+      } else {
+        book.quantity -= quantity;
+        this.earnings += book.value * quantity;
+        console.log(`SUCCESFUL TRANSACTION!`);
+      }
+    }
+  });
+  let bookTitle = this.list.some((book) => book.title === title);
+  if (!bookTitle) {
+    console.log(`OUT OF STOCK: ${book.title}`);
+  }
 };
 
 store.prototype.totalEarnings = function () {
@@ -68,3 +86,5 @@ store.prototype.listInventory = function () {
 };
 
 sampleStore.listInventory();
+sampleStore.sellBook("Cinder", 5);
+sampleStore.sellBook("The Little Prince", 5);
